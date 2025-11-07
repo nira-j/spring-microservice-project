@@ -1,0 +1,31 @@
+#spring:
+#  application:
+#    name: order-service
+#  config:
+#    import: optional:configserver:http://localhost:8888
+
+
+spring:
+  application:
+    name: order-service
+  cloud:
+    config:
+      enabled: true
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5433/microservice
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    
+server:
+  port: 8084

@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: user-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+#spring:
+#  application:
+#    name: user-service
+#  cloud:
+#    config:
+#      enabled: false
+#     
+#server:
+#  port: 8080
+#      
+#  datasource:
+#    url: jdbc:postgresql://localhost:5433/microservice
+#    username: postgres
+#    password: postgres
+#    driver-class-name: org.postgresql.Driver
+#  
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    
+#keycloak:
+#  admin:
+#    username: user
+#    password: user
+#    server-url: http://keycloak:8080
+#    realm: ecom-app
+#    client-id: admin-cli
+#    client-uid: 74d31cf4-5808-43de-93e0-01a079063245
