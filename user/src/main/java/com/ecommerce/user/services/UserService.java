@@ -4,7 +4,9 @@ import com.ecommerce.user.dto.AddressDTO;
 import com.ecommerce.user.dto.UserRequest;
 import com.ecommerce.user.dto.UserResponse;
 import com.ecommerce.user.models.Address;
+import com.ecommerce.user.models.Role;
 import com.ecommerce.user.models.User;
+import com.ecommerce.user.repository.RoleRepository;
 import com.ecommerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
    // private final KeyCloakAdminService keyCloakAdminService;
 //    private List<User> userList = new ArrayList<>();
 //    private Long nextId = 1L;
@@ -27,28 +30,28 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-//    public void addUser(UserRequest userRequest){
-////        user.setId(nextId++);
+   public void addUser(UserRequest userRequest){
+ //       user.setId(nextId++);
 //        String token = keyCloakAdminService.getAdminAccessToken();
 //        String keycloakUserId =
 //                keyCloakAdminService.createUser(token, userRequest);
 //
-//        User user = new User();
-//        updateUserFromRequest(user, userRequest);
+        User user = new User();
+        updateUserFromRequest(user, userRequest);
 //        user.setKeycloakId(keycloakUserId);
 //
 //        keyCloakAdminService.assignRealmRoleToUser(userRequest.getUsername(),
 //                "USER", keycloakUserId);
-//        userRepository.save(user);
-//    }
+        userRepository.save(user);
+   }
 
-    public Optional<UserResponse> fetchUser(String id) {
-        return userRepository.findById(String.valueOf(id))
+    public Optional<UserResponse> fetchUser(Long id) {
+        return userRepository.findById(id)
                 .map(this::mapToUserResponse);
     }
 
-    public boolean updateUser(String id, UserRequest updatedUserRequest) {
-        return userRepository.findById(String.valueOf(id))
+    public boolean updateUser(Long id, UserRequest updatedUserRequest) {
+        return userRepository.findById(id)
                 .map(existingUser -> {
                     updateUserFromRequest(existingUser, updatedUserRequest);
                     userRepository.save(existingUser);
@@ -61,6 +64,10 @@ public class UserService {
         user.setLastName(userRequest.getLastName());
         user.setEmail(userRequest.getEmail());
         user.setPhone(userRequest.getPhone());
+        // role
+        Optional<Role> role = roleRepository.findById((long) 2);
+        user.setRole(role.get());
+        
         if (userRequest.getAddress() != null) {
             Address address = new Address();
             address.setStreet(userRequest.getAddress().getStreet());
