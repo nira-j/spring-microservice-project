@@ -2,16 +2,16 @@ spring:
   application:
     name: configserver
 
-# spring.profiles.active=native
+#  profiles:
+#    active: default
 
   cloud:
     config:
-      config:
-        server:
-          git:
-            uri: https://github.com/nira-j/microservices-config.git
-            search-paths: config
-            default-label: main
+      server:
+        git:
+          uri: https://github.com/nira-j/microservices-config.git
+          search-paths: config
+          default-label: main
 server:
   port: 8888
 ## To enable Symmetric Key(simple) encryption/decryption
