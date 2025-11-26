@@ -1,5 +1,7 @@
-FROM eclipse-temurin:17
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
-COPY target/*.jar app.jar
+COPY target/*.jar /app.jar
+COPY src/main/resources/application.yml application.yml
 EXPOSE 8888
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java","-jar","app.jar","--spring.config.location=file:/app/application.yml"]
