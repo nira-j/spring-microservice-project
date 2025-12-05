@@ -1,5 +1,13 @@
 package com.ecommerce.user.services;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Service;
+
 import com.ecommerce.user.dto.AddressDTO;
 import com.ecommerce.user.dto.UserRequest;
 import com.ecommerce.user.dto.UserResponse;
@@ -8,18 +16,15 @@ import com.ecommerce.user.models.Role;
 import com.ecommerce.user.models.User;
 import com.ecommerce.user.repository.RoleRepository;
 import com.ecommerce.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    
    // private final KeyCloakAdminService keyCloakAdminService;
 //    private List<User> userList = new ArrayList<>();
 //    private Long nextId = 1L;
@@ -43,6 +48,45 @@ public class UserService {
 //        keyCloakAdminService.assignRealmRoleToUser(userRequest.getUsername(),
 //                "USER", keycloakUserId);
         userRepository.save(user);
+   }
+   
+   public String addUser(OAuth2User principal, String authBy) {
+	   User user = new User();
+	   try {
+		   Map<String, Object> attributes = principal.getAttributes();
+
+		   String fullName = (String) attributes.get("name");
+		   if (fullName != null) {
+		       String[] parts = fullName.split(" ");
+		       user.setFirstName(parts[0]);
+		       user.setLastName(parts.length > 1 ? parts[1] : "");
+		   }
+
+		   Object idObj = attributes.get("id");
+		   if (idObj != null) {
+		       user.setKeycloakId(idObj.toString());
+		   }
+
+		   Object locationObj = attributes.get("location");
+		   user.setLocation(locationObj != null ? locationObj.toString() : null);
+
+		   Object emailObj = attributes.get("email");
+		   user.setEmail(emailObj != null ? emailObj.toString() : null);
+
+		   Object loginObj = attributes.get("login");
+		   user.setUsername(loginObj != null ? loginObj.toString() : null);
+
+		   user.setAuthBy(authBy);
+		   Optional<Role> role = roleRepository.findById((long) 2);
+	       user.setRole(role.get());
+	       userRepository.save(user);
+		   
+	   }catch(Exception e) {
+		   e.printStackTrace();
+		   return "Something wet wrong, user not created !!";
+	   }
+	   
+	return "user created successfully !!";
    }
 
     public Optional<UserResponse> fetchUser(Long id) {

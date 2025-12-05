@@ -7,8 +7,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,11 +28,14 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     private String keycloakId;
+    private String username;
+    private String password;
     private String firstName;
     private String lastName;
-
+    private String location;
     private String email;
     private String phone;
+    private String authBy;;
     
     @ManyToOne
     @JoinColumn(name = "role_id")
