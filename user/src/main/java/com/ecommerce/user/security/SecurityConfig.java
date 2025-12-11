@@ -14,25 +14,26 @@ import com.ecommerce.user.services.GitHubOAuth2UserService;
 public class SecurityConfig {
 
 	 @Bean
-	    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	        http
 	          .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/", "/public", "/css/**").permitAll()
+	            .requestMatchers("/auth/**", "/public", "/css/**").permitAll()
 	            .anyRequest().authenticated()
-	          )
-	          .oauth2Login(oauth2 -> oauth2
-	            // default login page or custom login page can be set here
-	            .loginPage("/oauth2/authorization/github")
-	          )
-	          .logout(logout -> logout
-	            .logoutSuccessUrl("/")
-	            .permitAll()
 	          );
+//	          .oauth2Login(oauth2 -> oauth2
+//	            // default login page or custom login page can be set here
+//	            .loginPage("/oauth2/authorization/github")
+//	            .defaultSuccessUrl("/profile", true)
+//	          )
+//	          .logout(logout -> logout
+//	            .logoutSuccessUrl("/")
+//	            .permitAll()
+//	          );
 	        return http.build();
 	    }
 	 
-	 @Bean
-	 public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService() {
-	     return new GitHubOAuth2UserService();
-	 }
+		/*
+		 * @Bean public OAuth2UserService<OAuth2UserRequest, OAuth2User>
+		 * customOAuth2UserService() { return new GitHubOAuth2UserService(); }
+		 */
 }
